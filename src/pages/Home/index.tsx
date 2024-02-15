@@ -10,14 +10,24 @@ function Home() {
                     <label htmlFor="task">Will work on</label>
                     <TaskInput
                         id="task"
+                        list="task-suggestions"
                         placeholder="Give your project a name"
                     />
+
+                    <datalist id="task-suggestions">
+                        <option value="My website" />
+                        <option value="Studying" />
+                        <option value="My self" />
+                    </datalist>
 
                     <label htmlFor="minutesAmount">for</label>
                     <MinutesAmountInput
                         type="number"
                         id="minutesAmount"
                         placeholder="00"
+                        step={5}
+                        min={5}
+                        max={60}
                     />
 
                     <span>minutes.</span>
