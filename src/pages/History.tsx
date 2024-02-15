@@ -1,7 +1,7 @@
 function History() {
     return (
         <>
-            history
+            <div>history</div>
         </>
     )
 }
