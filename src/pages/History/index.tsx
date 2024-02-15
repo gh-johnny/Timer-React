@@ -12,7 +12,7 @@ function History() {
                             <th>Task</th>
                             <th>Duration</th>
                             <th>Start</th>
-                            <th>Status statusColor="green"</th>
+                            <th>Status</th>
                         </tr>
                     </thead>
                     <tbody>
