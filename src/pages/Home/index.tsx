@@ -5,11 +5,10 @@ import { z } from 'zod'
 import { CountDownContainer, FormContainer, HomeContainer, MinutesAmountInput, Separator, StartCountDownButton, StopCountDownButton, TaskInput } from "./styles"
 import { useEffect, useState } from "react"
 import { differenceInSeconds } from 'date-fns'
-import { cy } from "date-fns/locale"
 
 const newCycleFormValidationSchema = z.object({
     task: z.string().min(1, 'Please specify the task'),
-    minutesAmount: z.number().min(5, 'Minimum is 5min').max(60, 'Max is 60min'),
+    minutesAmount: z.number().min(1, 'Minimum is 5min').max(60, 'Max is 60min'),
 })
 
 type TNewCycleFormValidationSchema = z.infer<typeof newCycleFormValidationSchema>
@@ -19,7 +18,8 @@ type TCycle = {
     task: string,
     minutesAmount: number,
     startDate: Date,
-    interruptedData?: Date,
+    interruptedDate?: Date,
+    finishedDate?: Date,
 }
 
 function Home() {
@@ -51,7 +51,7 @@ function Home() {
     }
 
     const handleInterruptCycle = () => {
-        setCycles(cycles.map(cycle => cycle.id === activeCycleId ? { ...cycle, interruptedDate: new Date() } : cycle))
+        setCycles(prev => prev.map(cycle => cycle.id === activeCycleId ? { ...cycle, interruptedDate: new Date() } : cycle))
         setActiveCycleId(null)
     }
 
@@ -75,20 +75,28 @@ function Home() {
 
         if (activeCycle) {
             interval = setInterval(() => {
-                setAmountSecondsPassed(differenceInSeconds(new Date(), activeCycle.startDate))
+                const differenceInSecondsValue = differenceInSeconds(new Date(), activeCycle.startDate)
+
+                differenceInSecondsValue > totalSeconds
+                    ? () => {
+                        setCycles(prev => prev.map(cycle => cycle.id === activeCycleId ? { ...cycle, finishedDate: new Date() } : cycle));
+                        setAmountSecondsPassed(0)
+                        clearInterval(interval)
+                    }
+                    : setAmountSecondsPassed(differenceInSecondsValue)
+
             }, 1000)
         }
 
         return () => {
             clearInterval(interval)
         }
-    }, [activeCycle])
+
+    }, [activeCycle, totalSeconds, activeCycleId])
 
     useEffect(() => {
         if (activeCycle) document.title = `${minutes}:${seconds}`
     }, [minutes, seconds, activeCycle])
-
-    console.log(cycles)
 
     return (
         <HomeContainer>
@@ -114,8 +122,8 @@ function Home() {
                         type="number"
                         id="minutesAmount"
                         placeholder="00"
-                        step={5}
-                        min={5}
+                        // step={5}
+                        min={1}
                         max={60}
                         {...register('minutesAmount', { valueAsNumber: true })}
                     />
