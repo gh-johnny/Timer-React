@@ -1,6 +1,6 @@
 import { HeaderContainer } from "./styles"
 
-import logo from '../../assets/logo.svg'
+import myLogo from '../../assets/logo-transparent-svg.svg'
 import { Scroll, Timer } from "phosphor-react"
 import { NavLink } from "react-router-dom"
 
@@ -8,7 +8,12 @@ function Header() {
     return (
         <>
             <HeaderContainer>
-                <img src={logo} alt="Two green triangles on top of the other of which represents the app logo" />
+                <img
+                    src={myLogo}
+                    alt="Two green triangles on top of the other of which represents the app logo"
+                    width={100}
+                    height={100}
+                />
                 <nav>
                     <NavLink
                         to="/"
