@@ -66,10 +66,11 @@ const STATUS_COLOR = {
     yellow: 'yellow-500',
     green: 'green-500',
     red: 'red-500',
-} as const
+}
 
 type TStatusProps = {
-    statusColor: keyof typeof STATUS_COLOR
+    // Browser gets mad with camelCase here
+    statuscolor: 'yellow' | 'red' | 'green'
 }
 
 const Status = styled.span<TStatusProps>`
@@ -82,7 +83,7 @@ const Status = styled.span<TStatusProps>`
         width: 0.5rem;
         height: 0.5rem;
         border-radius: 999px;
-        background: ${props => props.theme[STATUS_COLOR[props.statusColor]]};
+        background: ${props => props.theme[STATUS_COLOR[props.statuscolor]]};
     }
 `
 
