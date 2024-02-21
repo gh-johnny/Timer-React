@@ -1,6 +1,11 @@
+import { useContext } from "react"
 import { HistoryContainer, HistoryList, Status } from "./styles"
+import { CyclesContext } from "../../contexts/CyclesContext"
 
 function History() {
+    const { cycles } = useContext(CyclesContext)
+    console.log(cycles)
+
     return (
         <HistoryContainer>
             <h1>My history</h1>
@@ -21,7 +26,7 @@ function History() {
                             <td>20 minutes</td>
                             <td>2 months ago</td>
                             <td>
-                                <Status statusColor="red">Completed</Status> 
+                                <Status statuscolor="red">Completed</Status>
                             </td>
                         </tr>
                         <tr>
@@ -29,7 +34,7 @@ function History() {
                             <td>20 minutes</td>
                             <td>2 months ago</td>
                             <td>
-                                <Status statusColor="yellow">Completed</Status>
+                                <Status statuscolor="yellow">Completed</Status>
                             </td>
                         </tr>
                         <tr>
@@ -37,7 +42,7 @@ function History() {
                             <td>20 minutes</td>
                             <td>2 months ago</td>
                             <td>
-                                <Status statusColor="green">Completed</Status>
+                                <Status statuscolor="green">Completed</Status>
                             </td>
                         </tr>
                         <tr>
@@ -45,7 +50,7 @@ function History() {
                             <td>20 minutes</td>
                             <td>2 months ago</td>
                             <td>
-                                <Status statusColor="green">Completed</Status>
+                                <Status statuscolor="green">Completed</Status>
                             </td>
                         </tr>
                         <tr>
@@ -53,7 +58,7 @@ function History() {
                             <td>20 minutes</td>
                             <td>2 months ago</td>
                             <td>
-                                <Status statusColor="green">Completed</Status>
+                                <Status statuscolor="green">Completed</Status>
                             </td>
                         </tr>
                     </tbody>
