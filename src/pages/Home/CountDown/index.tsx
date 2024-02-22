@@ -32,10 +32,6 @@ function CountDown() {
                     markCurrentCycleAsFinished()
                     setAmountSecondsPassed(totalSeconds)
                     clearInterval(interval)
-                    console.log(
-                        activeCycle?.finishedDate,
-                    )
-
                 } else {
                     setAmountSecondsPassed(differenceInSecondsValue)
                 }

@@ -1,10 +1,10 @@
 import { useContext } from "react"
 import { HistoryContainer, HistoryList, Status } from "./styles"
 import { CyclesContext } from "../../contexts/CyclesContext"
+import { formatDistanceToNow } from "date-fns"
 
 function History() {
     const { cycles } = useContext(CyclesContext)
-    console.log(cycles)
 
     return (
         <HistoryContainer>
@@ -21,50 +21,46 @@ function History() {
                         </tr>
                     </thead>
                     <tbody>
+                        {
+                            cycles.map(cycle =>
+                                <tr key={cycle.id}>
+                                    <td>{cycle.task}</td>
+                                    <td>{cycle.minutesAmount} minutes</td>
+                                    <td>
+                                        {formatDistanceToNow(cycle.startDate)}
+                                    </td>
+                                    <td>
+                                        {cycle.finishedDate && <Status statuscolor="green">Completed</Status>}
+                                        {cycle.interruptedDate && <Status statuscolor="red">Interrupted</Status>}
+                                        {!cycle.finishedDate && !cycle.interruptedDate && <Status statuscolor="yellow">In progress</Status>}
+                                    </td>
+                                </tr>
+                            )
+                        }
+                        {/* Some static things just to showcase */}
                         <tr>
-                            <td>Task</td>
-                            <td>20 minutes</td>
-                            <td>2 months ago</td>
+                            <td>Design logo</td>
+                            <td>30 minutes</td>
                             <td>
-                                <Status statuscolor="red">Completed</Status>
+                                3 days ago
                             </td>
-                        </tr>
-                        <tr>
-                            <td>Task</td>
-                            <td>20 minutes</td>
-                            <td>2 months ago</td>
-                            <td>
-                                <Status statuscolor="yellow">Completed</Status>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>Task</td>
-                            <td>20 minutes</td>
-                            <td>2 months ago</td>
                             <td>
                                 <Status statuscolor="green">Completed</Status>
                             </td>
                         </tr>
                         <tr>
-                            <td>Task</td>
-                            <td>20 minutes</td>
-                            <td>2 months ago</td>
+                            <td>Cook dinner</td>
+                            <td>12 minutes</td>
                             <td>
-                                <Status statuscolor="green">Completed</Status>
+                                2 hours ago
                             </td>
-                        </tr>
-                        <tr>
-                            <td>Task</td>
-                            <td>20 minutes</td>
-                            <td>2 months ago</td>
                             <td>
-                                <Status statuscolor="green">Completed</Status>
+                                <Status statuscolor="red">Interrupted</Status>
                             </td>
                         </tr>
                     </tbody>
                 </table>
             </HistoryList>
-
         </HistoryContainer>
     )
 }
