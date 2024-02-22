@@ -47,7 +47,7 @@ function Home() {
                 </FormProvider>
                 <CountDown />
                 {
-                    activeCycle ?
+                    activeCycle && !activeCycle?.finishedDate ?
                         <StopCountDownButton
                             type="button"
                             onClick={interruptCycle}
