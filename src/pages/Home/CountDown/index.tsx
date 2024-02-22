@@ -28,13 +28,17 @@ function CountDown() {
             interval = setInterval(() => {
                 const differenceInSecondsValue = differenceInSeconds(new Date(), activeCycle.startDate)
 
-                differenceInSecondsValue > totalSeconds
-                    ? () => {
-                        markCurrentCycleAsFinished()
-                        setAmountSecondsPassed(0)
-                        clearInterval(interval)
-                    }
-                    : setAmountSecondsPassed(differenceInSecondsValue)
+                if (differenceInSecondsValue > totalSeconds) {
+                    markCurrentCycleAsFinished()
+                    setAmountSecondsPassed(totalSeconds)
+                    clearInterval(interval)
+                    console.log(
+                        activeCycle?.finishedDate,
+                    )
+
+                } else {
+                    setAmountSecondsPassed(differenceInSecondsValue)
+                }
 
             }, 1000)
         }
