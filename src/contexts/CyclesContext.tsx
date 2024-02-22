@@ -53,8 +53,6 @@ function CyclesContextProvider({ children }: { children: ReactNode }) {
         setCycles(prev => [...prev, newCycle])
         setActiveCycleId(newCycle.id)
         setAmountSecondsPassed(0)
-
-        // reset()
     }
 
     const interruptCycle = () => {
