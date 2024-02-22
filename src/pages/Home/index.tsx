@@ -26,7 +26,12 @@ function Home() {
             minutesAmount: 0,
         }
     })
-    const { handleSubmit, /*reset,*/ watch } = cycleForm
+    const { handleSubmit, reset, watch } = cycleForm
+
+    const handleCreateNewCycle = (data: TNewCycleFormValidationSchema) => {
+        createNewCycle(data)
+        reset()
+    }
 
     const task = watch('task')
     const isSubmitDisabled = !task
@@ -34,7 +39,7 @@ function Home() {
     return (
         <HomeContainer>
             <form
-                onSubmit={handleSubmit(createNewCycle)}
+                onSubmit={handleSubmit(handleCreateNewCycle)}
                 action=""
             >
                 <FormProvider {...cycleForm}>
@@ -42,7 +47,7 @@ function Home() {
                 </FormProvider>
                 <CountDown />
                 {
-                    activeCycle ?
+                    activeCycle && !activeCycle?.finishedDate ?
                         <StopCountDownButton
                             type="button"
                             onClick={interruptCycle}
