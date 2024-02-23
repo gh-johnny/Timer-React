@@ -10,7 +10,7 @@ export type TCycle = {
     finishedDate?: Date,
 }
 
-interface ICyclesState {
+export interface ICyclesState {
     cycles: TCycle[],
     activeCycleId: string | undefined,
 }
@@ -25,8 +25,8 @@ function cyclesReducer(state: ICyclesState, action: { type: EActionTypes, payloa
 
         case EActionTypes.INTERRUPT_CYCLE: {
             const currentCycleIndex = state.cycles.findIndex(cycle => cycle.id === state.activeCycleId)
-            const indexExists = currentCycleIndex > 0
-            if (!indexExists) return state
+            const indexDoesNotExists = currentCycleIndex < 0 // findIndex return -1 if no index is found
+            if (indexDoesNotExists) return state
 
             return produce(state, draft => {
                 draft.cycles[currentCycleIndex].interruptedDate = new Date()
@@ -35,8 +35,8 @@ function cyclesReducer(state: ICyclesState, action: { type: EActionTypes, payloa
         }
         case EActionTypes.MARK_AS_FINISHED: {
             const currentCycleIndex = state.cycles.findIndex(cycle => cycle.id === state.activeCycleId)
-            const indexExists = currentCycleIndex > 0
-            if (!indexExists) return state
+            const indexDoesNotExists = currentCycleIndex < 0
+            if (indexDoesNotExists) return state
 
             return produce(state, draft => {
                 draft.cycles[currentCycleIndex].finishedDate = new Date()
