@@ -1,4 +1,4 @@
-import { ReactNodem, createContext, useReducer, useState } from "react"
+import { ReactNode, createContext, useReducer, useState } from "react"
 
 type TCycle = {
     id: string,
@@ -34,23 +34,28 @@ export const CyclesContext = createContext({} as ICyclesContext)
 
 function CyclesContextProvider({ children }: { children: ReactNode }) {
     const [cyclesState, dispatch] = useReducer((state: ICyclesState, action: any) => {
-        if (action.type === "addNewCycle") {
-            return {
-                ...state,
-                cycles: [...state.cycles, action.payload.newCycle],
-                activeCycleId: action.payload.newCycle.id
-            }
+        switch (action.type) {
+            case "addNewCycle":
+                return {
+                    ...state,
+                    cycles: [...state.cycles, action.payload.newCycle],
+                    activeCycleId: action.payload.newCycle.id
+                }
+            case "interruptCycle":
+                return {
+                    ...state,
+                    cycles: state.cycles.map(cycle => cycle.id === state.activeCycleId ? { ...cycle, interruptedDate: new Date() } : cycle),
+                    activeCycleId: undefined,
+                }
+            case "markAsFinished":
+                return {
+                    ...state,
+                    cycles: state.cycles.map(cycle => cycle.id === state.activeCycleId ? { ...cycle, finishedDate: new Date() } : cycle),
+                    activeCycleId: undefined,
+                }
         }
 
-        if (action.type === "interruptCycle") {
-            return {
-                ...state,
-                cycles: state.cycles.map(cycle => cycle.id === state.activeCycleId ? { ...cycle, interruptedDate: new Date() } : cycle),
-                activeCycleId: undefined,
-            }
-        }
         return state
-
     }, {
         cycles: [],
         activeCycleId: undefined,
@@ -66,14 +71,12 @@ function CyclesContextProvider({ children }: { children: ReactNode }) {
     }
 
     const markCurrentCycleAsFinished = () => {
-        // setCycles(prev => prev.map(cycle => cycle.id === activeCycleId ? { ...cycle, finishedDate: new Date() } : cycle));
         dispatch({
             type: 'markAsFinished',
             payload: {
                 activeCycleId,
             }
         })
-        setActiveCycleId(undefined)
     }
 
     const createNewCycle = (data: TCreateCycleData) => {
@@ -94,8 +97,6 @@ function CyclesContextProvider({ children }: { children: ReactNode }) {
     }
 
     const interruptCycle = () => {
-        // setCycles(prev => prev.map(cycle => cycle.id === activeCycleId ? { ...cycle, interruptedDate: new Date() } : cycle))
-
         dispatch({
             type: 'interruptCycle',
             payload: {
