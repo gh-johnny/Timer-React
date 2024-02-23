@@ -1,4 +1,4 @@
-import { Envelope } from "phosphor-react"
+import { EActionTypes } from "./actions"
 
 export type TCycle = {
     id: string,
@@ -14,13 +14,7 @@ interface ICyclesState {
     activeCycleId: string | undefined,
 }
 
-export enum EActionTypes {
-    ADD_NEW_CYCLE = 'ADD_NEW_CYCLE',
-    INTERRUPT_CYCLE = 'INTERRUPT_CYCLE',
-    MARK_AS_FINISHED = 'MARK_AS_FINISHED',
-}
-
-function cyclesReducer(state: ICyclesState, action: { type: EActionTypes, payload: any }) {
+function cyclesReducer(state: ICyclesState, action: { type: EActionTypes, payload?: any }) {
     switch (action.type) {
         case EActionTypes.ADD_NEW_CYCLE:
             return {
