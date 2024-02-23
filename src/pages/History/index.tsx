@@ -35,7 +35,7 @@ function History() {
                                         {!cycle.finishedDate && !cycle.interruptedDate && <Status statuscolor="yellow">In progress</Status>}
                                     </td>
                                 </tr>
-                            )
+                            ).reverse() // Most recent is topest one
                         }
                         {/* Some static things just to showcase */}
                         <tr>

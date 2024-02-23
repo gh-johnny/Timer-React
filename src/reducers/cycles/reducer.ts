@@ -1,0 +1,52 @@
+import { produce } from "immer"
+import { EActionTypes } from "./actions"
+
+export type TCycle = {
+    id: string,
+    task: string,
+    minutesAmount: number,
+    startDate: Date,
+    interruptedDate?: Date,
+    finishedDate?: Date,
+}
+
+export interface ICyclesState {
+    cycles: TCycle[],
+    activeCycleId: string | undefined,
+}
+
+function cyclesReducer(state: ICyclesState, action: { type: EActionTypes, payload?: any }) {
+    switch (action.type) {
+        case EActionTypes.ADD_NEW_CYCLE:
+            return produce(state, draft => {
+                draft.cycles.push(action.payload.newCycle)
+                draft.activeCycleId = action.payload.newCycle.id
+            })
+
+        case EActionTypes.INTERRUPT_CYCLE: {
+            const currentCycleIndex = state.cycles.findIndex(cycle => cycle.id === state.activeCycleId)
+            const indexDoesNotExists = currentCycleIndex < 0 // findIndex return -1 if no index is found
+            if (indexDoesNotExists) return state
+
+            return produce(state, draft => {
+                draft.cycles[currentCycleIndex].interruptedDate = new Date()
+                draft.activeCycleId = undefined
+            })
+        }
+        case EActionTypes.MARK_AS_FINISHED: {
+            const currentCycleIndex = state.cycles.findIndex(cycle => cycle.id === state.activeCycleId)
+            const indexDoesNotExists = currentCycleIndex < 0
+            if (indexDoesNotExists) return state
+
+            return produce(state, draft => {
+                draft.cycles[currentCycleIndex].finishedDate = new Date()
+                draft.activeCycleId = undefined
+            })
+        }
+        default:
+            return state
+    }
+
+}
+
+export { cyclesReducer }

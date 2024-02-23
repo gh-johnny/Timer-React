@@ -1,13 +1,8 @@
-import { ReactNode, createContext, useState } from "react"
-
-type TCycle = {
-    id: string,
-    task: string,
-    minutesAmount: number,
-    startDate: Date,
-    interruptedDate?: Date,
-    finishedDate?: Date,
-}
+import { ReactNode, createContext, useEffect, useReducer, useState } from "react"
+import { TCycle, cyclesReducer, ICyclesState } from "../reducers/cycles/reducer"
+import { addNewCycleAction, interruptCycleAction, markAsFinishedCycleAction } from "../reducers/cycles/actions"
+import { localStorageUtils, localStorageKeyPrefix } from "../utils/localStorageUtils"
+import { differenceInSeconds } from "date-fns"
 
 type TCreateCycleData = {
     task: string,
@@ -27,20 +22,35 @@ interface ICyclesContext {
 
 export const CyclesContext = createContext({} as ICyclesContext)
 
-function CyclesContextProvider({ children }: { children: ReactNode }) {
-    const [cycles, setCycles] = useState<TCycle[]>([])
-    const [activeCycleId, setActiveCycleId] = useState<string | undefined>(undefined)
-    const [amountSecondsPassed, setAmountSecondsPassed] = useState(0)
+const localStorageKeyVersion = '1.0.0'
+const localStorageKey = `${localStorageKeyPrefix}cycles-state-${localStorageKeyVersion}`
 
+function CyclesContextProvider({ children }: { children: ReactNode }) {
+    const [cyclesState, dispatch] = useReducer(cyclesReducer, {
+        cycles: [],
+        activeCycleId: undefined,
+    },
+        (initialState) => {
+            const { localStorageGetItem } = localStorageUtils(localStorageKey)
+            if (localStorageGetItem()) return localStorageGetItem() as ICyclesState
+            return initialState
+        }
+    )
+
+    const { cycles, activeCycleId } = cyclesState
     const activeCycle = cycles.find(cycle => cycle.id === activeCycleId)
+
+    const [amountSecondsPassed, setAmountSecondsPassed] = useState(() => {
+        if (activeCycle) return differenceInSeconds(new Date(), activeCycle.startDate)
+        return 0
+    })
 
     const setSecondsPasses = (seconds: number) => {
         setAmountSecondsPassed(seconds)
     }
 
     const markCurrentCycleAsFinished = () => {
-        setCycles(prev => prev.map(cycle => cycle.id === activeCycleId ? { ...cycle, finishedDate: new Date() } : cycle));
-        setActiveCycleId(undefined)
+        dispatch(markAsFinishedCycleAction())
     }
 
     const createNewCycle = (data: TCreateCycleData) => {
@@ -51,15 +61,19 @@ function CyclesContextProvider({ children }: { children: ReactNode }) {
             startDate: new Date(),
         }
 
-        setCycles(prev => [...prev, newCycle])
-        setActiveCycleId(newCycle.id)
+        dispatch(addNewCycleAction(newCycle))
         setAmountSecondsPassed(0)
     }
 
     const interruptCycle = () => {
-        setCycles(prev => prev.map(cycle => cycle.id === activeCycleId ? { ...cycle, interruptedDate: new Date() } : cycle))
-        setActiveCycleId(undefined)
+        dispatch(interruptCycleAction())
+        document.title = originalAppName
     }
+
+    useEffect(() => {
+        const { localStorageSetItem } = localStorageUtils(localStorageKey)
+        localStorageSetItem(cyclesState)
+    }, [cyclesState])
 
     return (
         <CyclesContext.Provider
