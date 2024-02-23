@@ -1,13 +1,5 @@
 import { ReactNode, createContext, useReducer, useState } from "react"
-
-type TCycle = {
-    id: string,
-    task: string,
-    minutesAmount: number,
-    startDate: Date,
-    interruptedDate?: Date,
-    finishedDate?: Date,
-}
+import { EActionTypes, TCycle, cyclesReducer } from "../reducers/cycles"
 
 type TCreateCycleData = {
     task: string,
@@ -25,38 +17,11 @@ interface ICyclesContext {
     interruptCycle: () => void,
 }
 
-interface ICyclesState {
-    cycles: TCycle[],
-    activeCycleId: string | undefined,
-}
-
 export const CyclesContext = createContext({} as ICyclesContext)
 
 function CyclesContextProvider({ children }: { children: ReactNode }) {
-    const [cyclesState, dispatch] = useReducer((state: ICyclesState, action: any) => {
-        switch (action.type) {
-            case "addNewCycle":
-                return {
-                    ...state,
-                    cycles: [...state.cycles, action.payload.newCycle],
-                    activeCycleId: action.payload.newCycle.id
-                }
-            case "interruptCycle":
-                return {
-                    ...state,
-                    cycles: state.cycles.map(cycle => cycle.id === state.activeCycleId ? { ...cycle, interruptedDate: new Date() } : cycle),
-                    activeCycleId: undefined,
-                }
-            case "markAsFinished":
-                return {
-                    ...state,
-                    cycles: state.cycles.map(cycle => cycle.id === state.activeCycleId ? { ...cycle, finishedDate: new Date() } : cycle),
-                    activeCycleId: undefined,
-                }
-        }
 
-        return state
-    }, {
+    const [cyclesState, dispatch] = useReducer(cyclesReducer, {
         cycles: [],
         activeCycleId: undefined,
     })
@@ -72,7 +37,7 @@ function CyclesContextProvider({ children }: { children: ReactNode }) {
 
     const markCurrentCycleAsFinished = () => {
         dispatch({
-            type: 'markAsFinished',
+            type: EActionTypes.MARK_AS_FINISHED,
             payload: {
                 activeCycleId,
             }
@@ -88,7 +53,7 @@ function CyclesContextProvider({ children }: { children: ReactNode }) {
         }
 
         dispatch({
-            type: 'addNewCycle',
+            type: EActionTypes.ADD_NEW_CYCLE,
             payload: {
                 newCycle
             }
@@ -98,7 +63,7 @@ function CyclesContextProvider({ children }: { children: ReactNode }) {
 
     const interruptCycle = () => {
         dispatch({
-            type: 'interruptCycle',
+            type: EActionTypes.INTERRUPT_CYCLE,
             payload: {
                 activeCycleId,
             }
