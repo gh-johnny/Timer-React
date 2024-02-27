@@ -67,7 +67,6 @@ function CyclesContextProvider({ children }: { children: ReactNode }) {
 
     const interruptCycle = () => {
         dispatch(interruptCycleAction())
-        document.title = originalAppName
     }
 
     useEffect(() => {
