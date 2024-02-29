@@ -1,5 +1,4 @@
 {
-  "homepage": "https://gh-johnny.github.io/Timer-React",
   "name": "02-timer",
   "private": true,
   "version": "1.0.0",
@@ -8,9 +7,7 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
-    "preview": "vite preview",
-    "predeploy": "pnpm run build",
-    "deploy": "gh-pages -d dist"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@hookform/resolvers": "^3.3.4",
