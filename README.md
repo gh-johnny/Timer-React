@@ -2,7 +2,11 @@
 #### Written in React.js, Typescript and Styled-components!
 [![My Skills](https://skillicons.dev/icons?i=react,ts,styledcomponents)](https://skillicons.dev)
 
-A website that allows you to keep track of your time during your daily tasks 
+A website that allows you to keep track of your time during your daily tasks!
+
+Here is the live website (👇deployed at vercel)
+<br>
+[https://timer-react-23g3qx9kd-gh-johnnys-projects.vercel.app/](https://timer-react-23g3qx9kd-gh-johnnys-projects.vercel.app/)
 <img width="800" height="500" src="https://raw.githubusercontent.com/gh-johnny/Timer-React/main/docs/assets/timer-app-home-default.jpeg" alt="App printscreen">
 <img width="800" height="500" src="https://raw.githubusercontent.com/gh-johnny/Timer-React/main/docs/assets/timer-app-home-countdown.jpeg" alt="App printscreen">
 <img width="800" height="500" src="https://raw.githubusercontent.com/gh-johnny/Timer-React/main/docs/assets/timer-app-history.jpeg" alt="App printscreen">
@@ -202,6 +206,4 @@ Where the routes and their respective components are established
 
 
 <br>
-<br>
-<br>
-This project is under MIT License.
+This project is under the MIT License.
