@@ -22,7 +22,7 @@ function CountDown() {
     }, [minutes, seconds, activeCycle])
 
     useEffect(() => {
-        let interval: number;
+        let interval: any;
 
         if (activeCycle) {
             interval = setInterval(() => {
